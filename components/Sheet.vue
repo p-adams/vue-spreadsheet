@@ -3,19 +3,28 @@
      <table>
         <thead>
           <tr>
-            <th v-for="(col, index) in cols" :key="index">
+            <th
+              class="row-col-label"
+              v-for="(col, index) in colHead"
+              :key="index">
               {{col}}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in rows" :key="index">
-            <td v-for="(col, index) in cols" :key="index">
-              <div
-                  :class="{'selected' : cellSelected(row, col)}"
-                  @mousedown="selectCell(row, col)">
-                <input>
-              </div>
+          <tr
+            v-for="(row, rowKey, index) in grid"
+            :key="rowKey">
+            <th
+              class="row-col-label"
+            >{{rowKey+1}}</th>
+            <td
+                v-for="(col, colKey, index) in row"
+                :key="colKey"
+                :class="{'selected' : cellSelected(rowKey, colKey)}"
+                @click="selectCell(rowKey, colKey)"
+            >
+              {{col}}
             </td>
           </tr>
         </tbody>
@@ -26,56 +35,61 @@
 export default {
   name: 'sheet',
   created () {
-    this.initCols()
-    this.initRows()
+    this.initColHead()
+    this.createSpreadSheet()
   },
   data () {
     return {
       selected: '',
-      isSelected: false,
-      rows: [],
-      cols: null
+      grid: [],
+      colHead: [' '],
+      isSelected: false
     }
   },
   methods: {
-    initCols () {
-      this.cols = 'abcdef'.toUpperCase().split('')
+    initColHead () {
+      this.colHead.push(...'ABCDEF'.split(''))
     },
-    initRows () {
-      for (let i = 1; i <= 6; i++) {
-        this.rows.push(i)
+    createSpreadSheet () {
+      for (let i = 0; i <= 5; i++) {
+        this.grid[i] = []
+        for (let j = 0; j <= 5; j++) {
+          this.grid[i][j] = false
+        }
       }
     },
     selectCell (row, col) {
+      console.log(`row ${row} col ${col}`)
       this.selected = row + col
       this.isSelected = true
-      this.rows[row] = this.isSelected
-      this.cols[col] = this.isSelected
-      // alert(this.selected)
     },
     cellSelected (row, col) {
-      return (this.rows[row] === this.isSelected && this.cols[col] === this.isSelected)
+      return (this.grid[row][col] === true)
     }
   }
 }
 </script>
 <style scoped>
   table {
-    width: 50%;
+    width: 100%;
   }
   table, th, td {
     border: 1px solid #bdbdbd;
     border-collapse: collapse;
   }
-  th {
+  .row-col-label {
     background: #00b0ff;
     color: #e1f5fe;
   }
   th, td {
-    padding: 5px;
+    padding: 15px;
   }
   .selected {
     background: red;
+  }
+  .foo {
+    height: 50px;
+    width: 50px;
   }
 </style>
 
