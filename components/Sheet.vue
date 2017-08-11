@@ -21,10 +21,10 @@
             <td
                 v-for="(col, colKey, index) in row"
                 :key="colKey"
-                :class="{'selected' : cellSelected(rowKey, colKey)}"
                 @click="selectCell(rowKey, colKey)"
+                :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
-              {{col}}
+            {{col}}
             </td>
           </tr>
         </tbody>
@@ -47,21 +47,24 @@ export default {
     }
   },
   methods: {
+    changeIt () {
+      this.arr[0].splice(0, 1, 'meow')
+    },
     initColHead () {
-      this.colHead.push(...'ABCDEF'.split(''))
+      this.colHead.push(...'ABC'.split(''))
     },
     createSpreadSheet () {
-      for (let i = 0; i <= 5; i++) {
+      for (let i = 0; i <= 2; i++) {
         this.grid[i] = []
-        for (let j = 0; j <= 5; j++) {
+        for (let j = 0; j <= 2; j++) {
           this.grid[i][j] = false
         }
       }
     },
     selectCell (row, col) {
-      console.log(`row ${row} col ${col}`)
-      this.selected = row + col
-      this.isSelected = true
+      let r = this.grid[row].slice(0)
+      r[col] = true
+      this.$set(this.grid, row, r)
     },
     cellSelected (row, col) {
       return (this.grid[row][col] === true)
@@ -86,10 +89,6 @@ export default {
   }
   .selected {
     background: red;
-  }
-  .foo {
-    height: 50px;
-    width: 50px;
   }
 </style>
 
