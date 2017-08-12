@@ -43,11 +43,9 @@ export default {
   },
   data () {
     return {
-      clicked: false,
-      selected: [],
+      coors: [],
       grid: [],
-      colHead: [' '],
-      isSelected: false
+      colHead: [' ']
     }
   },
   methods: {
@@ -66,11 +64,14 @@ export default {
       }
     },
     selectCell (row, col) {
-      this.isSelected = true
+      this.coors.push({x: row, y: col})
+      let len = this.coors.length - 1
+      let start = {x: this.coors[0].x, y: this.coors[0].y}
+      let end = {x: this.coors[len].x, y: this.coors[len].y}
+      console.log(`start: ${start.x} ${start.y} end: ${end.x} ${end.y}`)
       this.grid[row].splice(col, 1, 2)
-      this.addSelected(row, col)
     },
-    addSelected (row, col) {
+    selectInBetween (coors) {
       // let column = this.colHead[col + 1]
       // console.log(`col ${column} : ${this.colHead[col + 1]}`)
     },
