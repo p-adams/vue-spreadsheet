@@ -19,10 +19,13 @@
               class="row-col-label"
             >{{rowKey+1}}</th>
             <td
+                class="cell"
                 v-for="(col, colKey, index) in row"
                 :key="colKey"
-                @click="selectCell(rowKey, colKey)"
-                :class="{'selected' : cellSelected(rowKey, colKey)}"
+                @click.shift="selectCell(rowKey, colKey)"
+                :class="{
+                  'selected' : cellSelected(rowKey, colKey)
+                  }"
             >
             {{col}}
             </td>
@@ -40,34 +43,39 @@ export default {
   },
   data () {
     return {
-      selected: '',
+      clicked: false,
+      selected: [],
       grid: [],
       colHead: [' '],
       isSelected: false
     }
   },
   methods: {
-    changeIt () {
-      this.arr[0].splice(0, 1, 'meow')
+    clicked (row, col) {
+      this.grid[row].splice(col, 1, 1)
     },
     initColHead () {
       this.colHead.push(...'ABC'.split(''))
     },
     createSpreadSheet () {
       for (let i = 0; i <= 2; i++) {
-        this.grid[i] = []
+        this.grid.push([])
         for (let j = 0; j <= 2; j++) {
-          this.grid[i][j] = false
+          this.grid[i].push(0)
         }
       }
     },
     selectCell (row, col) {
-      let r = this.grid[row].slice(0)
-      r[col] = true
-      this.$set(this.grid, row, r)
+      this.isSelected = true
+      this.grid[row].splice(col, 1, 2)
+      this.addSelected(row, col)
+    },
+    addSelected (row, col) {
+      // let column = this.colHead[col + 1]
+      // console.log(`col ${column} : ${this.colHead[col + 1]}`)
     },
     cellSelected (row, col) {
-      return (this.grid[row][col] === true)
+      return (this.grid[row][col] === 2)
     }
   }
 }
@@ -85,10 +93,16 @@ export default {
     color: #e1f5fe;
   }
   th, td {
-    padding: 15px;
+    padding: 25px;
+  }
+  .cell {
+    cursor: pointer;
   }
   .selected {
-    background: red;
+    border: 2px solid #76ff03;
+  }
+  .clicked {
+    border: 5px solid black;
   }
 </style>
 
