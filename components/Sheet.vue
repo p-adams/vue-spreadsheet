@@ -53,12 +53,12 @@ export default {
       this.grid[row].splice(col, 1, 1)
     },
     initColHead () {
-      this.colHead.push(...'ABC'.split(''))
+      this.colHead.push(...'ABCD'.split(''))
     },
     createSpreadSheet () {
-      for (let i = 0; i <= 2; i++) {
+      for (let i = 0; i <= 3; i++) {
         this.grid.push([])
-        for (let j = 0; j <= 2; j++) {
+        for (let j = 0; j <= 3; j++) {
           this.grid[i].push(0)
         }
       }
@@ -68,12 +68,13 @@ export default {
       let len = this.coors.length - 1
       let start = {x: this.coors[0].x, y: this.coors[0].y}
       let end = {x: this.coors[len].x, y: this.coors[len].y}
-      console.log(`start: ${start.x} ${start.y} end: ${end.x} ${end.y}`)
       this.grid[row].splice(col, 1, 2)
-    },
-    selectInBetween (coors) {
-      // let column = this.colHead[col + 1]
-      // console.log(`col ${column} : ${this.colHead[col + 1]}`)
+      for (let i = start.x; i <= end.x; i++) {
+        this.grid[i].splice(end.y, 1, 2)
+        for (let j = start.y; j <= end.y; j++) {
+          this.grid[i].splice(j, 1, 2)
+        }
+      }
     },
     cellSelected (row, col) {
       return (this.grid[row][col] === 2)
@@ -100,10 +101,18 @@ export default {
     cursor: pointer;
   }
   .selected {
+    background: gray;
     border: 2px solid #76ff03;
   }
   .clicked {
     border: 5px solid black;
   }
 </style>
-
+/* console.log(`i ${i} j ${j}`)
+          // console.log(`end.x ${end.x} end.y ${end.y}`)
+          // console.log(`startx ${start.x} starty ${start.y}`)
+          // if (end.x !== start.x || end.y !== start.y) {
+            // this.grid[i].splice(0, i, 2)
+            // this.grid[start.x].splice(end.x, 1, 2)
+            // console.log(this.grid[i][j])
+          // } */
