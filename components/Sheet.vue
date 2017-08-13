@@ -17,7 +17,9 @@
             :key="rowKey">
             <th
               class="row-col-label"
-            >{{rowKey+1}}</th>
+            >
+              {{rowKey + 1}}
+            </th>
             <td
                 class="cell"
                 v-for="(col, colKey, index) in row"
@@ -26,7 +28,8 @@
                 @mouseover.shift="selectCell(rowKey, colKey)"
                 :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
-             {{showCoors(rowKey, colKey)}}
+              {{grid[rowKey][colKey]}}
+              <input v-model="grid[rowKey][colKey]">
             </td>
           </tr>
         </tbody>
