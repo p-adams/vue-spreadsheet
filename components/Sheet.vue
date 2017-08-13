@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div body oncontextmenu="return false;">
      <table>
         <thead>
           <tr>
@@ -22,12 +22,11 @@
                 class="cell"
                 v-for="(col, colKey, index) in row"
                 :key="colKey"
-                @click.shift="selectCell(rowKey, colKey)"
-                :class="{
-                  'selected' : cellSelected(rowKey, colKey)
-                  }"
+                @contextmenu="resetGrid"
+                @mouseover.shift="selectCell(rowKey, colKey)"
+                :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
-            {{col}}
+             {{showCoors(rowKey, colKey)}}
             </td>
           </tr>
         </tbody>
@@ -43,14 +42,17 @@ export default {
   },
   data () {
     return {
+      selected: false,
       coors: [],
       grid: [],
-      colHead: [' ']
+      colHead: [' '],
+      start: '',
+      end: ''
     }
   },
   methods: {
-    clicked (row, col) {
-      this.grid[row].splice(col, 1, 1)
+    resetGrid () {
+      this.iterateOverGrid(0)
     },
     initColHead () {
       this.colHead.push(...'ABCD'.split(''))
@@ -66,18 +68,24 @@ export default {
     selectCell (row, col) {
       this.coors.push({x: row, y: col})
       let len = this.coors.length - 1
-      let start = {x: this.coors[0].x, y: this.coors[0].y}
-      let end = {x: this.coors[len].x, y: this.coors[len].y}
+      this.start = {x: this.coors[0].x, y: this.coors[0].y}
+      this.end = {x: this.coors[len].x, y: this.coors[len].y}
       this.grid[row].splice(col, 1, 2)
-      for (let i = start.x; i <= end.x; i++) {
-        this.grid[i].splice(end.y, 1, 2)
-        for (let j = start.y; j <= end.y; j++) {
-          this.grid[i].splice(j, 1, 2)
-        }
-      }
+      this.iterateOverGrid(2)
     },
     cellSelected (row, col) {
       return (this.grid[row][col] === 2)
+    },
+    showCoors (row, col) {
+      return `${row} ${col}`
+    },
+    iterateOverGrid (col) {
+      for (let i = this.start.x; i <= this.end.x; i++) {
+        this.grid[i].splice(this.end.y, 1, col)
+        for (let j = this.start.y; j <= this.end.y; j++) {
+          this.grid[i].splice(j, 1, col)
+        }
+      }
     }
   }
 }
@@ -101,18 +109,10 @@ export default {
     cursor: pointer;
   }
   .selected {
-    background: gray;
+    background: #bdbdbd;
     border: 2px solid #76ff03;
   }
   .clicked {
     border: 5px solid black;
   }
 </style>
-/* console.log(`i ${i} j ${j}`)
-          // console.log(`end.x ${end.x} end.y ${end.y}`)
-          // console.log(`startx ${start.x} starty ${start.y}`)
-          // if (end.x !== start.x || end.y !== start.y) {
-            // this.grid[i].splice(0, i, 2)
-            // this.grid[start.x].splice(end.x, 1, 2)
-            // console.log(this.grid[i][j])
-          // } */
