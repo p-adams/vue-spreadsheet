@@ -1,5 +1,6 @@
 <template>
   <div body oncontextmenu="return false;">
+
      <table>
         <thead>
           <tr>
@@ -66,11 +67,10 @@ export default {
       }
     },
     initInputIds () {
-      let key = 'abcdefghi'.split('')
       for (let i = 0; i <= 3; i++) {
         this.inputIds.push([])
         for (let j = 0; j <= 3; j++) {
-          this.inputIds[i].push((i + 1) + key[i + j])
+          this.inputIds[i].push('')
         }
       }
     },
@@ -103,7 +103,7 @@ export default {
       for (let i = this.start.x; i <= this.end.x; i++) {
         this.grid[i].splice(this.end.y, 1, col)
         for (let j = this.start.y; j <= this.end.y; j++) {
-          this.grid[i].splice(j, 1, col)
+          this.grid[i].splice(this.end.y, 1, col)
         }
       }
     }
