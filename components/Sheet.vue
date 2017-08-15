@@ -1,6 +1,12 @@
 <template>
   <div body oncontextmenu="return false;">
-
+    {{rangeStart}}
+    <select>
+      <option>SUM</option>
+      <option>AVERAGE</option>
+      <option>MIN</option>
+      <option>MAX</option>
+    </select>
      <table>
         <thead>
           <tr>
@@ -48,18 +54,20 @@ export default {
   data () {
     return {
       selected: false,
+      size: 2,
       coors: [],
       grid: [],
       colHead: [' '],
       start: '',
       end: '',
-      inputIds: []
+      inputIds: [],
+      result: []
     }
   },
   methods: {
     resetGrid () {
-      for (let i = 0; i <= 3; i++) {
-        for (let j = 0; j <= 3; j++) {
+      for (let i = 0; i <= this.size; i++) {
+        for (let j = 0; j <= this.size; j++) {
           if (this.grid[i][j] === 2) {
             this.grid[i].splice(j, 1, 0)
           }
@@ -67,20 +75,20 @@ export default {
       }
     },
     initInputIds () {
-      for (let i = 0; i <= 3; i++) {
+      for (let i = 0; i <= this.size; i++) {
         this.inputIds.push([])
-        for (let j = 0; j <= 3; j++) {
+        for (let j = 0; j <= this.size; j++) {
           this.inputIds[i].push('')
         }
       }
     },
     initColHead () {
-      this.colHead.push(...'ABCD'.split(''))
+      this.colHead.push(...'ABC'.split(''))
     },
     createSpreadSheet () {
-      for (let i = 0; i <= 3; i++) {
+      for (let i = 0; i <= this.size; i++) {
         this.grid.push([])
-        for (let j = 0; j <= 3; j++) {
+        for (let j = 0; j <= this.size; j++) {
           this.grid[i].push(0)
         }
       }
@@ -100,12 +108,32 @@ export default {
       return `${row} ${col}`
     },
     iterateOverGrid (col) {
+      console.log(`start ${this.start.x} stop ${this.end.x}`)
       for (let i = this.start.x; i <= this.end.x; i++) {
         this.grid[i].splice(this.end.y, 1, col)
         for (let j = this.start.y; j <= this.end.y; j++) {
           this.grid[i].splice(this.end.y, 1, col)
         }
       }
+    },
+    loop (arr) {
+      for (let i = 0; i <= this.size; i++) {
+        for (let j = 0; j <= this.size; j++) {
+          return arr[i][j]
+        }
+      }
+    }
+  },
+  computed: {
+    rangeStart () {
+      for (let i = 0; i <= this.size; i++) {
+        for (let j = 0; j <= this.size; j++) {
+          if (this.grid[i][j] === 2 && this.inputIds[i][j] !== '') {
+            this.result.push(this.inputIds[i][j])
+          }
+        }
+      }
+      return this.result
     }
   }
 }
