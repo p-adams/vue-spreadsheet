@@ -32,7 +32,7 @@
                 v-for="(col, colKey, index) in row"
                 :key="colKey"
                 @contextmenu="resetGrid"
-                @mouseover.shift="selectCell(rowKey, colKey)"
+                @mouseenter.shift="selectCell(rowKey, colKey)"
                 :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
               {{rowKey}} {{colKey}}
