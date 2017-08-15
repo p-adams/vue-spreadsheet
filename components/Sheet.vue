@@ -28,8 +28,8 @@
                 @mouseover.shift="selectCell(rowKey, colKey)"
                 :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
-              {{grid[rowKey][colKey]}}
-              <input v-model="grid[rowKey][colKey]">
+              {{rowKey}} {{colKey}}
+              <input v-model="inputIds[rowKey][colKey]">
             </td>
           </tr>
         </tbody>
@@ -42,6 +42,7 @@ export default {
   created () {
     this.initColHead()
     this.createSpreadSheet()
+    this.initInputIds()
   },
   data () {
     return {
@@ -50,12 +51,28 @@ export default {
       grid: [],
       colHead: [' '],
       start: '',
-      end: ''
+      end: '',
+      inputIds: []
     }
   },
   methods: {
     resetGrid () {
-      this.iterateOverGrid(0)
+      for (let i = 0; i <= 3; i++) {
+        for (let j = 0; j <= 3; j++) {
+          if (this.grid[i][j] === 2) {
+            this.grid[i].splice(j, 1, 0)
+          }
+        }
+      }
+    },
+    initInputIds () {
+      let key = 'abcdefghi'.split('')
+      for (let i = 0; i <= 3; i++) {
+        this.inputIds.push([])
+        for (let j = 0; j <= 3; j++) {
+          this.inputIds[i].push((i + 1) + key[i + j])
+        }
+      }
     },
     initColHead () {
       this.colHead.push(...'ABCD'.split(''))
