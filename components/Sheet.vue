@@ -65,6 +65,10 @@ export default {
       colHead: [' '],
       start: '',
       end: '',
+      minX: null,
+      minY: null,
+      maxX: null,
+      maxY: null,
       inputIds: [],
       result: []
     }
@@ -103,9 +107,10 @@ export default {
     },
     selectCell (row, col) {
       this.coors.push({x: row, y: col})
-      let len = this.coors.length - 1
-      this.start = {x: this.coors[0].x, y: this.coors[0].y}
-      this.end = {x: this.coors[len].x, y: this.coors[len].y}
+      this.minX = Math.min(...this.coors.map(el => el.x))
+      this.maxX = Math.max(...this.coors.map(el => el.x))
+      this.minY = Math.min(...this.coors.map(el => el.y))
+      this.maxY = Math.max(...this.coors.map(el => el.y))
       this.grid[row].splice(col, 1, 2)
       this.iterateOverGrid(2)
       this.setRange()
@@ -113,21 +118,11 @@ export default {
     cellSelected (row, col) {
       return (this.grid[row][col] === 2)
     },
-    iterateOverGrid (col) {
-      // the starting y position is less than or equal to ending y position
-      if (this.start.y <= this.end.y) {
-        for (let i = this.start.x; i <= this.end.x; i++) {
-          for (let j = this.start.y; j <= this.end.y; j++) {
-            this.grid[i].splice(j, 1, col)
-          }
-        }
-      } else {
-        // the starting y position is greater than the ending y position
-        for (let i = this.start.y; i >= this.end.y; i--) {
-          this.grid[this.start.x].splice(i, 1, 2)
-          for (let j = this.end.x; j >= this.start.x; j--) {
-            this.grid[j].splice(i, 1, col)
-          }
+    iterateOverGrid (val) {
+      for (let i = this.minX; i <= this.maxX; i++) {
+        this.grid[i].splice(this.minY, 1, 2)
+        for (let j = this.minY; j <= this.maxY; j++) {
+          this.grid[i].splice(j, 1, 2)
         }
       }
     },
