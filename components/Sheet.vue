@@ -1,6 +1,6 @@
 <template>
   <div body oncontextmenu="return false;">
-    {{rangeStart}}
+    {{rangeStart}}:{{rangeEnd}}
     <select>
       <option>SUM</option>
       <option>AVERAGE</option>
@@ -47,6 +47,7 @@
 </template>
 <script>
 import uniqBy from 'lodash/uniqBy'
+import sortBy from 'lodash/sortBy'
 export default {
   name: 'sheet',
   created () {
@@ -106,15 +107,14 @@ export default {
       this.start = {x: this.coors[0].x, y: this.coors[0].y}
       this.end = {x: this.coors[len].x, y: this.coors[len].y}
       this.grid[row].splice(col, 1, 2)
-      this.iterateOverGrid(row, col, 2)
+      this.iterateOverGrid(2)
+      this.setRange()
     },
     cellSelected (row, col) {
       return (this.grid[row][col] === 2)
     },
-    showCoors (row, col) {
-      return `${row} ${col}`
-    },
-    iterateOverGrid (row, c, col) {
+    iterateOverGrid (col) {
+      // the starting y position is less than or equal to ending y position
       if (this.start.y <= this.end.y) {
         for (let i = this.start.x; i <= this.end.x; i++) {
           for (let j = this.start.y; j <= this.end.y; j++) {
@@ -126,26 +126,31 @@ export default {
         for (let i = this.start.y; i >= this.end.y; i--) {
           this.grid[this.start.x].splice(i, 1, 2)
           for (let j = this.end.x; j >= this.start.x; j--) {
-            this.grid[j].splice(i, 1, 2)
+            this.grid[j].splice(i, 1, col)
           }
         }
       }
-    }
-  },
-  computed: {
-    rangeStart () {
+    },
+    setRange () {
       let temp = []
       for (let i = 0; i <= this.size; i++) {
         for (let j = 0; j <= this.size; j++) {
           if (this.grid[i][j] === 2 && this.inputIds[i][j] !== '') {
-            console.log(i, j)
-            let index = this.colHead[1 + j] + (i + 1)
-            console.log(index)
-            temp.push({id: index, value: this.inputIds[i][j]})
+            let id = this.colHead[1 + j] + (i + 1)
+            temp.push({id, value: this.inputIds[i][j]})
           }
         }
       }
-      return uniqBy(temp, 'id')
+      this.result = sortBy(uniqBy(temp, 'id'), 'id')
+      return this.result
+    }
+  },
+  computed: {
+    rangeStart () {
+      return this.result.map(el => el.id)[0]
+    },
+    rangeEnd () {
+      return this.result.map(el => el.id)[this.result.length - 1]
     }
   }
 }
