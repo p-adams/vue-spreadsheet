@@ -153,7 +153,7 @@ export default {
     border-collapse: collapse;
   }
   .row-col-label {
-    background: #00b0ff;
+    background: #4E7AB5;
     color: #e1f5fe;
   }
   th, td {
@@ -163,7 +163,7 @@ export default {
     cursor: pointer;
   }
   .selected {
-    background: #e3f2fd;
+    background: #eeeeee;
     border: 2px solid #64b5f6;
   }
   .clicked {
