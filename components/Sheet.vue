@@ -32,8 +32,10 @@
                 v-for="(col, colKey, index) in row"
                 :key="colKey"
                 @contextmenu="resetGrid"
-                @mouseenter.shift="selectCell(rowKey, colKey)"
-                :class="{'selected' : cellSelected(rowKey, colKey)}"
+                @click.shift="selectCell(rowKey, colKey)"
+                :class="{
+                    'selected' : cellSelected(rowKey, colKey)
+                    }"
             >
               {{rowKey}} {{colKey}}
               <input v-model="inputIds[rowKey][colKey]">
@@ -44,6 +46,7 @@
   </div>
 </template>
 <script>
+import uniqBy from 'lodash/uniqBy'
 export default {
   name: 'sheet',
   created () {
@@ -54,7 +57,8 @@ export default {
   data () {
     return {
       selected: false,
-      size: 2,
+      disableCursor: false,
+      size: 3,
       coors: [],
       grid: [],
       colHead: [' '],
@@ -73,6 +77,9 @@ export default {
           }
         }
       }
+      this.coors = []
+      this.start = ''
+      this.end = ''
     },
     initInputIds () {
       for (let i = 0; i <= this.size; i++) {
@@ -83,7 +90,7 @@ export default {
       }
     },
     initColHead () {
-      this.colHead.push(...'ABC'.split(''))
+      this.colHead.push(...'ABCD'.split(''))
     },
     createSpreadSheet () {
       for (let i = 0; i <= this.size; i++) {
@@ -99,7 +106,7 @@ export default {
       this.start = {x: this.coors[0].x, y: this.coors[0].y}
       this.end = {x: this.coors[len].x, y: this.coors[len].y}
       this.grid[row].splice(col, 1, 2)
-      this.iterateOverGrid(2)
+      this.iterateOverGrid(row, col, 2)
     },
     cellSelected (row, col) {
       return (this.grid[row][col] === 2)
@@ -107,33 +114,38 @@ export default {
     showCoors (row, col) {
       return `${row} ${col}`
     },
-    iterateOverGrid (col) {
-      console.log(`start ${this.start.x} stop ${this.end.x}`)
-      for (let i = this.start.x; i <= this.end.x; i++) {
-        this.grid[i].splice(this.end.y, 1, col)
-        for (let j = this.start.y; j <= this.end.y; j++) {
-          this.grid[i].splice(this.end.y, 1, col)
+    iterateOverGrid (row, c, col) {
+      if (this.start.y <= this.end.y) {
+        for (let i = this.start.x; i <= this.end.x; i++) {
+          for (let j = this.start.y; j <= this.end.y; j++) {
+            this.grid[i].splice(j, 1, col)
+          }
         }
-      }
-    },
-    loop (arr) {
-      for (let i = 0; i <= this.size; i++) {
-        for (let j = 0; j <= this.size; j++) {
-          return arr[i][j]
+      } else {
+        // the starting y position is greater than the ending y position
+        for (let i = this.start.y; i >= this.end.y; i--) {
+          this.grid[this.start.x].splice(i, 1, 2)
+          for (let j = this.end.x; j >= this.start.x; j--) {
+            this.grid[j].splice(i, 1, 2)
+          }
         }
       }
     }
   },
   computed: {
     rangeStart () {
+      let temp = []
       for (let i = 0; i <= this.size; i++) {
         for (let j = 0; j <= this.size; j++) {
           if (this.grid[i][j] === 2 && this.inputIds[i][j] !== '') {
-            this.result.push(this.inputIds[i][j])
+            console.log(i, j)
+            let index = this.colHead[1 + j] + (i + 1)
+            console.log(index)
+            temp.push({id: index, value: this.inputIds[i][j]})
           }
         }
       }
-      return this.result
+      return uniqBy(temp, 'id')
     }
   }
 }
