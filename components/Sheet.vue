@@ -1,12 +1,9 @@
 <template>
   <div body oncontextmenu="return false;">
-    {{rangeStart}}:{{rangeEnd}}
-    <select>
-      <option>SUM</option>
-      <option>AVERAGE</option>
-      <option>MIN</option>
-      <option>MAX</option>
-    </select>
+    <toolbar
+      :start="rangeStart"
+      :end="rangeEnd"
+    ></toolbar>
      <table>
         <thead>
           <tr>
@@ -33,11 +30,8 @@
                 :key="colKey"
                 @contextmenu="resetGrid"
                 @click.shift="selectCell(rowKey, colKey)"
-                :class="{
-                    'selected' : cellSelected(rowKey, colKey)
-                    }"
+                :class="{'selected' : cellSelected(rowKey, colKey)}"
             >
-              {{rowKey}} {{colKey}}
               <input v-model="inputIds[rowKey][colKey]">
             </td>
           </tr>
@@ -46,6 +40,7 @@
   </div>
 </template>
 <script>
+import Toolbar from './Toolbar'
 import uniqBy from 'lodash/uniqBy'
 import sortBy from 'lodash/sortBy'
 export default {
@@ -58,13 +53,10 @@ export default {
   data () {
     return {
       selected: false,
-      disableCursor: false,
       size: 3,
       coors: [],
       grid: [],
       colHead: [' '],
-      start: '',
-      end: '',
       minX: null,
       minY: null,
       maxX: null,
@@ -83,8 +75,7 @@ export default {
         }
       }
       this.coors = []
-      this.start = ''
-      this.end = ''
+      this.result = []
     },
     initInputIds () {
       for (let i = 0; i <= this.size; i++) {
@@ -147,6 +138,9 @@ export default {
     rangeEnd () {
       return this.result.map(el => el.id)[this.result.length - 1]
     }
+  },
+  components: {
+    Toolbar
   }
 }
 </script>
@@ -155,7 +149,7 @@ export default {
     width: 100%;
   }
   table, th, td {
-    border: 1px solid #bdbdbd;
+    border: 2px solid #bbdefb;
     border-collapse: collapse;
   }
   .row-col-label {
@@ -169,8 +163,8 @@ export default {
     cursor: pointer;
   }
   .selected {
-    background: #bdbdbd;
-    border: 2px solid #76ff03;
+    background: #e3f2fd;
+    border: 2px solid #64b5f6;
   }
   .clicked {
     border: 5px solid black;
