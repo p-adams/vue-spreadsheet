@@ -11,10 +11,21 @@
         <tbody>
             <tr class="toolbar">
                 <td>
-                    <input
-                        class="displayRange"
-                        :value="displayRange"
-                    />
+                    <span>
+                        <input
+                            class="displayRange"
+                            :value="startRange"
+                            v-model="low"
+                            placeholder="A1"
+                        />
+                        <span class="colon">:</span>
+                        <input
+                            class="displayRange"
+                            :value="endRange"
+                            v-model="high"
+                            placeholder="A3"
+                        />
+                    </span>
                 </td>
                 <td>
                     <div class="selectdiv">
@@ -68,7 +79,8 @@ export default {
   data () {
     return {
       missingEquals: false,
-      range: '',
+      low: '',
+      high: '',
       input: '',
       out: '',
       row: -1,
@@ -76,6 +88,12 @@ export default {
     }
   },
   watch: {
+    low (newVal, oldVal) {
+      console.log(`low new ${newVal}`)
+    },
+    high (newVal, oldVal) {
+      console.log(`high new ${newVal}`)
+    },
     input (n, o) {
       console.log(n, o)
     },
@@ -93,8 +111,11 @@ export default {
     }
   },
   computed: {
-    displayRange () {
-      return this.start !== undefined || this.end !== undefined ? `${this.start}:${this.end}` : null
+    startRange () {
+      return this.start !== undefined ? this.start : null
+    },
+    endRange () {
+      return this.end !== undefined ? this.end : null
     }
   }
 }
@@ -119,7 +140,7 @@ export default {
         font-size: 15px;
         border: 1px solid #4E7AB5;
         height: 50px;
-        width: 100px;
+        width: 75px;
         border-radius: 2px;
     }
     .selectdiv {
@@ -180,6 +201,10 @@ export default {
         padding: 10px;
         margin: 2px;
         cursor: pointer;
+    }
+    .colon {
+        font-size: 40px;
+        color: #4E7AB5;
     }
 </style>
 
