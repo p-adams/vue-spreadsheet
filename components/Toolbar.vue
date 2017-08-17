@@ -41,7 +41,7 @@
                         class="result"
                         v-model="input"
                         @change="calculate"
-                        placeholder="=10+10+10"
+                        placeholder="10+10+10"
                     />
                 </div>
                 <h6 v-show="missingEquals">input must begin with =</h6>                    
