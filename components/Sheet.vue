@@ -1,5 +1,6 @@
 <template>
   <div oncontextmenu="return false;">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <toolbar
       :start="rangeStart"
       :end="rangeEnd"
@@ -11,7 +12,8 @@
               class="row-col-label"
               v-for="(col, index) in colHead"
               :key="index">
-              {{col}}
+              <span v-if="col.length === 0"></span>
+              <col-label v-else :col="col"></col-label>
             </th>
           </tr>
         </thead>
@@ -41,6 +43,7 @@
 </template>
 <script>
 import Toolbar from './Toolbar'
+import ColLabel from './ColLabel'
 import uniqBy from 'lodash/uniqBy'
 import sortBy from 'lodash/sortBy'
 export default {
@@ -56,7 +59,7 @@ export default {
       size: 3,
       coors: [],
       grid: [],
-      colHead: [' '],
+      colHead: [''],
       minX: null,
       minY: null,
       maxX: null,
@@ -146,7 +149,8 @@ export default {
     }
   },
   components: {
-    Toolbar
+    Toolbar,
+    ColLabel
   }
 }
 </script>
