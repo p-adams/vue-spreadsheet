@@ -53,13 +53,9 @@
                </td>
             </tr>
             <tr>
-                <td colspan='2'>
-                    <input
-                        v-model="row"
-                        placeholder="# rows">
-                </td>
-                <td colspan='2'>
-                    <input placeholder="# columns">
+                <td colspan='4'>
+                    <button @click="row = 1">add row</button>
+                    <button @click="row = 0">remove row</button>
                 </td>
             </tr>
         </tbody>
@@ -68,15 +64,14 @@
 <script>
 export default {
   name: 'toolbar',
-  props: ['start', 'end', 'addrow'],
+  props: ['start', 'end', 'handlerow'],
   data () {
     return {
       missingEquals: false,
       range: '',
       input: '',
       out: '',
-      row: '',
-      col: '',
+      row: -1,
       selected: 'SUM'
     }
   },
@@ -84,8 +79,9 @@ export default {
     input (n, o) {
       console.log(n, o)
     },
-    row (n, o) {
-      this.addrow(n)
+    row (rowVal, o) {
+      this.handlerow(rowVal)
+      this.row = -1
     }
   },
   methods: {
@@ -172,6 +168,18 @@ export default {
     .equals {
         font-size: 35px;
         color: #4E7AB5;
+    }
+    button {
+        height: 35px;
+        width: 150px;
+        color: white;
+        font-size: 18px;
+        line-height: 12px;
+        background: #4E7AB5;
+        border: none;
+        padding: 10px;
+        margin: 2px;
+        cursor: pointer;
     }
 </style>
 

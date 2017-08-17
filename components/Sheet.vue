@@ -4,7 +4,7 @@
     <toolbar
       :start="rangeStart"
       :end="rangeEnd"
-      :addrow="addrow"
+      :handlerow="handleRow"
     ></toolbar>
      <table>
         <thead>
@@ -14,7 +14,12 @@
               v-for="(col, index) in colHead"
               :key="index">
               <span v-if="col.length === 0"></span>
-              <col-label v-else :col="col"></col-label>
+              <col-label v-else
+                :col="col"
+                :idx="index"
+                :asc-sort="ascSort"
+                :desc-sort="descSort"
+              ></col-label>
             </th>
           </tr>
         </thead>
@@ -135,13 +140,31 @@ export default {
       this.result = sortBy(uniqBy(temp, 'id'), 'id')
       return this.result
     },
-    addrow (row) {
-      console.log(`getting rows ${row}`)
-      // let newRow = row - this.row
+    handleRow (op) {
+      if (op === 1) {
+        this.addRow()
+      } else if (op === 0) {
+        this.removeRow()
+      } else {
+        return null
+      }
     },
-    addcol (col) {
-      console.log(`getting cols ${col}`)
-      // let newCol = col - this.col
+    addRow () {
+      this.grid.push([])
+      this.inputIds.push([])
+      for (let j = 0; j < this.col + 1; j++) this.grid[this.grid.length - 1].splice(j, 1, 0)
+      for (let j = 0; j < this.col + 1; j++) this.inputIds[this.grid.length - 1].splice(j, 1, '')
+    },
+    removeRow () {
+      this.grid.splice(this.grid.length - 1, 1)
+    },
+    ascSort (label, index) {
+      console.log(`asc ${label} ${index}`)
+    },
+    descSort (label, index) {
+      console.log(`desc ${label} ${index}`)
+      let res = this.inputIds.sort((a, b) => b[0] - a[0]).filter(function (n) { return n !== undefined })
+      console.log(`res ${res}`)
     }
   },
   computed: {
