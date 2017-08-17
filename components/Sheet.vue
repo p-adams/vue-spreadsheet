@@ -159,13 +159,29 @@ export default {
       this.grid.splice(this.grid.length - 1, 1)
     },
     ascSort (label, index) {
-      this.inputIds.sort((a, b) => a[index - 1] - b[index - 1])
+      let temp = []
+      for (let i = 0; i < this.row; i++) {
+        for (let j = 0; j < index; j++) {
+          temp.push(parseInt(this.inputIds[i][j]))
+        }
+      }
+      this.insertSortedArray(temp.sort((a, b) => a - b), index)
     },
     descSort (label, index) {
-      console.log(index)
-      let largest = this.inputIds[0][index - 1]
-      console.log(`largest ${largest}`)
-      this.inputIds.sort((a, b) => b[index - 1] - a[index - 1])
+      let temp = []
+      for (let i = 0; i < this.row; i++) {
+        for (let j = 0; j < index; j++) {
+          temp.push(parseInt(this.inputIds[i][j]))
+        }
+      }
+      this.insertSortedArray(temp.sort((a, b) => b - a), index)
+    },
+    insertSortedArray (arr, index) {
+      for (let i = 0; i < this.row; i++) {
+        for (let j = 0; j < index; j++) {
+          this.inputIds[i].splice(index - 1, 1, arr[i])
+        }
+      }
     }
   },
   computed: {
