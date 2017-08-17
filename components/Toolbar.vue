@@ -53,6 +53,14 @@
                         placeholder="30">
                </td>
             </tr>
+            <tr>
+                <td colspan='2'>
+                    <input placeholder="# rows">
+                </td>
+                <td colspan='2'>
+                    <input placeholder="# columns">
+                </td>
+            </tr>
         </tbody>
     </table>
 </template>

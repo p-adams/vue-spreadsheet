@@ -129,6 +129,12 @@ export default {
       }
       this.result = sortBy(uniqBy(temp, 'id'), 'id')
       return this.result
+    },
+    getRows () {
+      console.log(`getting rows`)
+    },
+    getCols () {
+      console.log(`getting cols`)
     }
   },
   computed: {
