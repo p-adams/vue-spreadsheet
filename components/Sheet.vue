@@ -4,6 +4,7 @@
     <toolbar
       :start="rangeStart"
       :end="rangeEnd"
+      :addrow="addrow"
     ></toolbar>
      <table>
         <thead>
@@ -56,7 +57,8 @@ export default {
   data () {
     return {
       selected: false,
-      size: 3,
+      row: 3,
+      col: 3,
       coors: [],
       grid: [],
       colHead: [''],
@@ -70,8 +72,8 @@ export default {
   },
   methods: {
     resetGrid () {
-      for (let i = 0; i <= this.size; i++) {
-        for (let j = 0; j <= this.size; j++) {
+      for (let i = 0; i <= this.row; i++) {
+        for (let j = 0; j <= this.col; j++) {
           if (this.grid[i][j] === 2) {
             this.grid[i].splice(j, 1, 0)
           }
@@ -81,9 +83,9 @@ export default {
       this.result = []
     },
     initInputIds () {
-      for (let i = 0; i <= this.size; i++) {
+      for (let i = 0; i <= this.row; i++) {
         this.inputIds.push([])
-        for (let j = 0; j <= this.size; j++) {
+        for (let j = 0; j <= this.col; j++) {
           this.inputIds[i].push('')
         }
       }
@@ -92,9 +94,9 @@ export default {
       this.colHead.push(...'ABCD'.split(''))
     },
     createSpreadSheet () {
-      for (let i = 0; i <= this.size; i++) {
+      for (let i = 0; i <= this.row; i++) {
         this.grid.push([])
-        for (let j = 0; j <= this.size; j++) {
+        for (let j = 0; j <= this.col; j++) {
           this.grid[i].push(0)
         }
       }
@@ -122,8 +124,8 @@ export default {
     },
     setRange () {
       let temp = []
-      for (let i = 0; i <= this.size; i++) {
-        for (let j = 0; j <= this.size; j++) {
+      for (let i = 0; i <= this.row; i++) {
+        for (let j = 0; j <= this.col; j++) {
           if (this.grid[i][j] === 2 && this.inputIds[i][j] !== '') {
             let id = this.colHead[1 + j] + (i + 1)
             temp.push({id, value: this.inputIds[i][j]})
@@ -133,11 +135,13 @@ export default {
       this.result = sortBy(uniqBy(temp, 'id'), 'id')
       return this.result
     },
-    getRows () {
-      console.log(`getting rows`)
+    addrow (row) {
+      console.log(`getting rows ${row}`)
+      // let newRow = row - this.row
     },
-    getCols () {
-      console.log(`getting cols`)
+    addcol (col) {
+      console.log(`getting cols ${col}`)
+      // let newCol = col - this.col
     }
   },
   computed: {

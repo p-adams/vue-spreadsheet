@@ -54,7 +54,9 @@
             </tr>
             <tr>
                 <td colspan='2'>
-                    <input placeholder="# rows">
+                    <input
+                        v-model="row"
+                        placeholder="# rows">
                 </td>
                 <td colspan='2'>
                     <input placeholder="# columns">
@@ -66,19 +68,24 @@
 <script>
 export default {
   name: 'toolbar',
-  props: ['start', 'end'],
+  props: ['start', 'end', 'addrow'],
   data () {
     return {
       missingEquals: false,
       range: '',
       input: '',
       out: '',
+      row: '',
+      col: '',
       selected: 'SUM'
     }
   },
   watch: {
     input (n, o) {
       console.log(n, o)
+    },
+    row (n, o) {
+      this.addrow(n)
     }
   },
   methods: {
