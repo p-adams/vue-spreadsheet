@@ -159,12 +159,13 @@ export default {
       this.grid.splice(this.grid.length - 1, 1)
     },
     ascSort (label, index) {
-      console.log(`asc ${label} ${index}`)
+      this.inputIds.sort((a, b) => a[index - 1] - b[index - 1])
     },
     descSort (label, index) {
-      console.log(`desc ${label} ${index}`)
-      let res = this.inputIds.sort((a, b) => b[0] - a[0]).filter(function (n) { return n !== undefined })
-      console.log(`res ${res}`)
+      console.log(index)
+      let largest = this.inputIds[0][index - 1]
+      console.log(`largest ${largest}`)
+      this.inputIds.sort((a, b) => b[index - 1] - a[index - 1])
     }
   },
   computed: {
