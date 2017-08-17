@@ -1,5 +1,5 @@
 <template>
-  <div body oncontextmenu="return false;">
+  <div oncontextmenu="return false;">
     <toolbar
       :start="rangeStart"
       :end="rangeEnd"
@@ -168,5 +168,5 @@ export default {
   }
   .clicked {
     border: 5px solid black;
-  }
+  } 
 </style>

@@ -2,13 +2,14 @@
     <table>
         <thead>
             <tr>
-                <th>range</th>
+                <th>selected range</th>
                 <th>functions</th>
-                <th>result</th>
+                <th>input</th>
+                <th>output</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr class="toolbar">
                 <td>
                     <input
                         class="displayRange"
@@ -18,7 +19,7 @@
                 <td>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
                     <div class="selectdiv">
-                        <select>
+                        <select v-model="selected">
                             <option>SUM</option>
                             <option>AVERAGE</option>
                             <option>MIN</option>
@@ -32,14 +33,22 @@
                             src="https://png.icons8.com/sigma/office/30"
                             title="Sigma"
                             width="30"
-                        height="30">
+                            height="30">
                         <span class="equals">
                             =
                         </span>          
                     <input
                         class="result"
-                    />  
-                </div>                    
+                        v-model="input"
+                        placeholder="=10+10+10"
+                    />
+                </div>
+                <h6 v-show="missingEquals">input must begin with =</h6>                    
+               </td>
+               <td>
+                   <input
+                        class="displayRange"
+                        placeholder="30">
                </td>
             </tr>
         </tbody>
@@ -49,6 +58,20 @@
 export default {
   name: 'toolbar',
   props: ['start', 'end'],
+  data () {
+    return {
+      missingEquals: false,
+      range: '',
+      input: '',
+      out: '',
+      selected: 'SUM'
+    }
+  },
+  watch: {
+    input (n, o) {
+      console.log(n, o)
+    }
+  },
   computed: {
     displayRange () {
       return this.start !== undefined || this.end !== undefined ? `${this.start}:${this.end}` : null
@@ -63,6 +86,14 @@ export default {
     }
     th {
         color: #4E7AB5;
+    }
+    td {
+        background: white;
+        border: 1px solid #9e9e9e;
+        padding: 15px;
+    }
+    input {
+        text-indent: 10px;
     }
     .displayRange {
         font-size: 15px;
