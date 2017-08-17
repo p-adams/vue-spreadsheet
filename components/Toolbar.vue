@@ -40,6 +40,7 @@
                     <input
                         class="result"
                         v-model="input"
+                        @change="calculate"
                         placeholder="=10+10+10"
                     />
                 </div>
@@ -48,6 +49,7 @@
                <td>
                    <input
                         class="displayRange"
+                        :value="out"
                         placeholder="30">
                </td>
             </tr>
@@ -70,6 +72,14 @@ export default {
   watch: {
     input (n, o) {
       console.log(n, o)
+    }
+  },
+  methods: {
+    parseExpression (expr) {
+      console.log(`parse`)
+    },
+    calculate () {
+      this.out = 30
     }
   },
   computed: {
