@@ -2,6 +2,9 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  router: {
+    base: '/vue-spreadsheet/'
+  },
   head: {
     title: 'vue-spreadsheet',
     meta: [
