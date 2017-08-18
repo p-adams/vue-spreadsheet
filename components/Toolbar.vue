@@ -11,20 +11,8 @@
         <tbody>
             <tr class="toolbar">
                 <td>
-                    <span>
-                        <input
-                            class="displayRange"
-                            :value="startRange"
-                            v-model="low"
-                            placeholder="A1"
-                        />
-                        <span class="colon">:</span>
-                        <input
-                            class="displayRange"
-                            :value="endRange"
-                            v-model="high"
-                            placeholder="A3"
-                        />
+                    <span class="range" :class="{'activeRange': start !== undefined || end !== undefined}">
+                        {{startRange}}:{{endRange}}
                     </span>
                 </td>
                 <td>
@@ -79,8 +67,6 @@ export default {
   data () {
     return {
       missingEquals: false,
-      low: '',
-      high: '',
       input: '',
       out: '',
       row: -1,
@@ -88,12 +74,6 @@ export default {
     }
   },
   watch: {
-    low (newVal, oldVal) {
-      console.log(`low new ${newVal}`)
-    },
-    high (newVal, oldVal) {
-      console.log(`high new ${newVal}`)
-    },
     input (n, o) {
       console.log(n, o)
     },
@@ -112,10 +92,10 @@ export default {
   },
   computed: {
     startRange () {
-      return this.start !== undefined ? this.start : null
+      return this.start !== undefined ? this.start : 'A1'
     },
     endRange () {
-      return this.end !== undefined ? this.end : null
+      return this.end !== undefined ? this.end : 'A3'
     }
   }
 }
@@ -202,8 +182,12 @@ export default {
         margin: 2px;
         cursor: pointer;
     }
-    .colon {
-        font-size: 40px;
+    .range {
+        font-size: 30px;
+        color: #cfd8dc;
+    }
+    .activeRange {
+        font-size: 30px;
         color: #4E7AB5;
     }
 </style>
