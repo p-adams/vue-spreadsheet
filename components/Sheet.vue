@@ -5,6 +5,7 @@
       :start="rangeStart"
       :end="rangeEnd"
       :handlerow="handleRow"
+      :cell-data="result"
     ></toolbar>
      <table>
         <thead>
@@ -43,8 +44,16 @@
               <input v-model="inputIds[rowKey][colKey]">
             </td>
           </tr>
+          <tr class="footer">
+            <td>Controls</td>
+            <td>multiselect cells: enter value into cell then shift + left mouse click</td>
+            <td>clear selected cells: right mouse click</td>
+            <td colspan="2">calculate total: enter values in cells, 
+              select range, choose function from drop down and press enter in input box</td>
+          </tr>
         </tbody>
      </table>
+     
   </div>
 </template>
 <script>
@@ -222,5 +231,10 @@ export default {
   }
   .clicked {
     border: 5px solid black;
-  } 
+  }
+  .footer {
+    color: #4E7AB5;
+    font-size: 12px;
+    text-align: left;
+  }
 </style>

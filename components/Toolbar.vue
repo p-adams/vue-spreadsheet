@@ -37,9 +37,10 @@
                         </span>          
                     <input
                         class="result"
-                        v-model="input"
-                        @change="calculate"
-                        placeholder="10+10+10"
+                        v-model="cd"
+                        @keyup.enter="calculate"
+                        placeholder="10,10,10"
+                        readonly
                     />
                 </div>
                 <h6 v-show="missingEquals">input must begin with =</h6>                    
@@ -63,7 +64,7 @@
 <script>
 export default {
   name: 'toolbar',
-  props: ['start', 'end', 'handlerow'],
+  props: ['start', 'end', 'handlerow', 'cellData'],
   data () {
     return {
       missingEquals: false,
@@ -84,10 +85,37 @@ export default {
   },
   methods: {
     parseExpression (expr) {
-      console.log(`parse`)
+      return expr.length > 1 ? expr.split(',') : expr
     },
     calculate () {
-      this.out = 30
+      switch (this.selected) {
+        case 'SUM':
+          this.sum(this.cd)
+          break
+        case 'AVERAGE':
+          this.average(this.cd)
+          break
+        case 'MIN':
+          this.minVal(this.cd)
+          break
+        case 'MAX':
+          this.maxVal(this.cd)
+          break
+        default:
+          return 'meow'
+      }
+    },
+    sum (res) {
+      this.out = res.reduce((a, b) => parseFloat(a) + parseFloat(b))
+    },
+    average (res) {
+      this.out = res.reduce((a, b) => parseFloat(a) + parseFloat(b)) / res.length
+    },
+    minVal (res) {
+      this.out = res.reduce((a, b) => parseFloat(a) < parseFloat(b) ? parseFloat(a) : parseFloat(b))
+    },
+    maxVal (res) {
+      this.out = res.reduce((a, b) => parseFloat(a) > parseFloat(b) ? parseFloat(a) : parseFloat(b))
     }
   },
   computed: {
@@ -96,6 +124,9 @@ export default {
     },
     endRange () {
       return this.end !== undefined ? this.end : 'A3'
+    },
+    cd () {
+      return this.cellData.map(el => el.value)
     }
   }
 }
