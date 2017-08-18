@@ -19,6 +19,7 @@ https://p-adams.github.io/vue-spreadsheet/
 ``` bash
 # clone repo
 $ git clone https://github.com/p-adams/vue-spreadsheet
+
 # install dependencies
 $ npm install # Or yarn install
 
