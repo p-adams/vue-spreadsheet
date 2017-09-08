@@ -1,5 +1,5 @@
 <template>
-  <div oncontextmenu="return false;">
+  <div class="table" oncontextmenu="return false;">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <toolbar
       :start="rangeStart"
@@ -183,6 +183,7 @@ export default {
           temp.push(parseInt(this.inputIds[i][j]))
         }
       }
+      // alert(`index: ${index}`)
       this.insertSortedArray(temp.sort((a, b) => b - a), index)
     },
     insertSortedArray (arr, index) {
@@ -208,8 +209,12 @@ export default {
 }
 </script>
 <style scoped>
+  .table{
+    margin-top: 45px;
+  }
   table {
-    width: 100%;
+    width: 75%;
+    margin: 0 auto;
   }
   table, th, td {
     border: 2px solid #bbdefb;
